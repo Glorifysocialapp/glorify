@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main   # adjust if your branch is different
+      
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:

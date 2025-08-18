@@ -51224,7 +51224,7 @@ G(a){var s,r,q,p,o,n,m=this,l=null,k=A.k4(!0,l,!0,!0,l,l,!1),j=t.p,i=A.ei(A.c([]
 h=A.aV(l,l,B.m,l,l,new A.bg(l,l,l,l,l,new A.l7(B.dc,B.iX,B.cn,A.c([h,(f==null?g.b:f).aU(0.8)],t.t_),l,l),B.E),l,l,l,l,l,l,l)
 g=A.c2(B.nL,A.j(a).ax.c,l,100)
 f=A.j(a).ok.d
-f=A.a2("Welcome To Glorify \nWhere Christians Unite!\nJoin us in worship, fellowship, and spiritual growth.\nExperience the joy of community and faith.\n",l,l,l,l,f==null?l:f.us(A.j(a).ax.c,20),l,l,l,l)
+f=A.a2("Welcome To Glorify \nWhere Christians Unite!\n",l,l,l,l,f==null?l:f.us(A.j(a).ax.c,20),l,l,l,l)
 s=A.b2(16)
 r=m.r?"Welcome Back!":"Join Us!"
 q=A.j(a).ok.f

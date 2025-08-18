@@ -1,4 +1,3 @@
-import 'package:cu_app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cu_app/services/api_service.dart';
 import 'package:cu_app/screens/main_navigation.dart';
@@ -134,15 +133,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                );
-              },
-            ),
+           
           ],
         ),
         body: Stack(
@@ -177,7 +168,12 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'Church App',
+                      """
+Welcome To Glorify 
+Where Christians Unite!
+Join us in worship, fellowship, and spiritual growth.
+Experience the joy of community and faith.
+""",
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.bold,

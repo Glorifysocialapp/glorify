@@ -1,7 +1,4 @@
-import 'package:cu_app/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cu_app/services/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,11 +9,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isDarkMode = false;
   bool _notificationsEnabled = true;
   bool _friendRequestsEnabled = true;
   bool _dailyVerseEnabled = true;
   String _selectedFontSize = 'Medium';
-
+  
   final List<String> _fontSizes = ['Small', 'Medium', 'Large'];
 
   @override
@@ -28,6 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
+      _isDarkMode = prefs.getBool('dark_mode') ?? false;
       _notificationsEnabled = prefs.getBool('notifications_enabled') ?? true;
       _friendRequestsEnabled = prefs.getBool('friend_requests_enabled') ?? true;
       _dailyVerseEnabled = prefs.getBool('daily_verse_enabled') ?? true;
@@ -46,8 +45,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -64,29 +61,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSectionHeader('Theme & Display'),
           _buildSettingsTile(
             icon: Icons.dark_mode,
-            title: 'Theme Mode',
-            subtitle: 'Choose your preferred theme',
-            trailing: DropdownButton<ThemeMode>(
-              value: themeProvider.themeMode,
-              onChanged: (ThemeMode? newThemeMode) {
-                if (newThemeMode != null) {
-                  themeProvider.setTheme(newThemeMode);
-                }
+            title: 'Dark Mode',
+            subtitle: 'Use dark theme for better night reading',
+            trailing: Switch(
+              value: _isDarkMode,
+              onChanged: (value) {
+                setState(() {
+                  _isDarkMode = value;
+                });
+                _saveSetting('dark_mode', value);
               },
-              items: const [
-                DropdownMenuItem(
-                  value: ThemeMode.system,
-                  child: Text('System'),
-                ),
-                DropdownMenuItem(
-                  value: ThemeMode.light,
-                  child: Text('Light'),
-                ),
-                DropdownMenuItem(
-                  value: ThemeMode.dark,
-                  child: Text('Dark'),
-                ),
-              ],
             ),
           ),
           _buildSettingsTile(
@@ -111,9 +95,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
           ),
-
+          
           const SizedBox(height: 24),
-
+          
           // Notifications Section
           _buildSectionHeader('Notifications'),
           _buildSettingsTile(
@@ -158,9 +142,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
           ),
-
+          
           const SizedBox(height: 24),
-
+          
           // Privacy Section
           _buildSectionHeader('Privacy & Security'),
           _buildSettingsTile(
@@ -189,9 +173,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             },
           ),
-
+          
           const SizedBox(height: 24),
-
+          
           // Support Section
           _buildSectionHeader('Support & About'),
           _buildSettingsTile(
@@ -231,17 +215,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 children: [
                   const Text(
-                    'A community app for believers to connect, share, and grow together in faith.\n\n'
+                    'A community app for believers to connect, share, and grow together in faith.nn'
                     'Features include Bible reading, note-taking, community posts, and friendship connections.',
                   ),
                 ],
               );
             },
           ),
-
+          
           const SizedBox(height: 24),
-
-          // Account Section
+          
+          // Danger Zone
           _buildSectionHeader('Account'),
           _buildSettingsTile(
             icon: Icons.logout,
@@ -252,7 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _showSignOutDialog();
             },
           ),
-
+          
           const SizedBox(height: 40),
         ],
       ),
@@ -265,9 +249,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
@@ -286,8 +270,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color:
-                Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+            color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -299,15 +282,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: titleColor,
-              ),
+            fontWeight: FontWeight.w600,
+            color: titleColor,
+          ),
         ),
         subtitle: Text(
           subtitle,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-              ),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+          ),
         ),
         trailing: trailing,
         onTap: onTap,
@@ -334,7 +317,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 8),
             _buildHelpItem('💬', 'Community Forum', 'Connect with other users'),
             const SizedBox(height: 8),
-            _buildHelpItem('📧', 'Contact Support', 'support@churchapp.com'),
+            _buildHelpItem('📧', 'Contact Support', 'support @churchapp.com'),
           ],
         ),
         actions: [
@@ -364,8 +347,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 12,
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -380,45 +362,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Sign Out'),
-        content:
-            const Text('Are you sure you want to sign out of your account?'),
+        content: const Text('Are you sure you want to sign out of your account?'),
         actions: [
           TextButton(
-            onPressed: (){
-              SharedPreferences.getInstance().then((prefs) {
-                prefs.remove('user_token'); // Clear user token
-                prefs.remove('user_id'); // Clear user ID
-                prefs.remove('username'); // Clear username
-                prefs.remove('email'); // Clear email
-                prefs.remove('profile_picture'); // Clear profile picture
-
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AuthScreen()),
-                  (route) => false,
-                );
-              });
-              
-            },
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
-             onPressed: (){
-              SharedPreferences.getInstance().then((prefs) {
-                prefs.remove('user_token'); // Clear user token
-                prefs.remove('user_id'); // Clear user ID
-                prefs.remove('username'); // Clear username
-                prefs.remove('email'); // Clear email
-                prefs.remove('profile_picture'); // Clear profile picture
-                prefs.clear(); // Clear all preferences
-                
-
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AuthScreen()),
-                  (route) => false,
-                );
-              });
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Sign out feature coming soon!'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
             },
             child: Text(
               'Sign Out',

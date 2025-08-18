@@ -130,7 +130,9 @@ class NotificationService {
       print('[NotificationService] Received new message: $data');
       if (data is Map<String, dynamic>) {
         _handleNewMessage(data);
-      } else      _handleNewMessage(Map<String, dynamic>.from(data));
+      } else {
+        _handleNewMessage(Map<String, dynamic>.from(data));
+      }
     
     });
 

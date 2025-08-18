@@ -12,7 +12,7 @@ import 'package:cu_app/models/activity_item.dart'; // Import ActivityItem
 import 'package:cu_app/models/notification.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://192.168.1.75:5000';
+  static const String baseUrl = 'https://glorify-server.onrender.com';
 
   Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();

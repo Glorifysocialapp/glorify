@@ -1,7 +1,7 @@
+import 'package:cu_app/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cu_app/services/api_service.dart';
 import 'package:cu_app/screens/main_navigation.dart';
-import 'package:cu_app/screens/reset_password_screen.dart';
 import 'package:cu_app/screens/terms_and_conditions_screen.dart';
 import 'package:cu_app/screens/forgot_password_email_screen.dart';
 import 'package:flutter/services.dart';
@@ -72,6 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
           if (profileImage != null) {
             await prefs.setString('user_profile_image', profileImage);
           }
+          await prefs.setBool('isLoggedIn', true); // Store login status
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const MainNavigation()),
@@ -84,11 +85,29 @@ class _AuthScreenState extends State<AuthScreen> {
         // Signup
         final success = await _apiService.register(username, password);
         if (success) {
-          _showSnackBar('Registration successful! Please review our terms.');
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => TermsAndConditionsScreen()),
-          );
+          _showSnackBar('Registration successful! Logging you in...');
+          // Automatically log in the user after successful registration
+          final response = await _apiService.login(username, password);
+          final token = response?[1];
+          final userId = response?[2];
+          final profileImage = response?[3];
+
+          if (token != null) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('user_token', token);
+            await prefs.setString('user_name', username);
+            await prefs.setString('user_id', userId);
+            if (profileImage != null) {
+              await prefs.setString('user_profile_image', profileImage);
+            }
+            await prefs.setBool('isLoggedIn', true); // Store login status
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MainNavigation()),
+            );
+          } else {
+            _showSnackBar('Login failed after registration.', isError: true);
+          }
         } else {
           _showSnackBar('Registration failed. Username might be taken.',
               isError: true);
@@ -113,6 +132,19 @@ class _AuthScreenState extends State<AuthScreen> {
         }
       },
       child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                );
+              },
+            ),
+          ],
+        ),
         body: Stack(
           children: [
             // Background Image/Gradient
@@ -185,9 +217,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              onSubmitted: (_) {
-                                FocusScope.of(context).requestFocus(_passwordFocusNode);
-                              },
+                              onSubmitted: (_)
+                                => FocusScope.of(context).requestFocus(_passwordFocusNode),
                             ),
                             const SizedBox(height: 16),
                             TextField(
@@ -211,9 +242,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               ),
                               obscureText: !_isPasswordVisible,
-                              onSubmitted: (_) {
-                                _authenticate();
-                              },
+                              onSubmitted: (_)
+                                => _authenticate(),
                             ),
                             const SizedBox(height: 24),
                             _isLoading

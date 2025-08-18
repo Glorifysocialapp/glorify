@@ -171,8 +171,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       """
 Welcome To Glorify 
 Where Christians Unite!
-Join us in worship, fellowship, and spiritual growth.
-Experience the joy of community and faith.
 """,
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,

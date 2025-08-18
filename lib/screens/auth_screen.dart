@@ -176,7 +176,7 @@ Experience the joy of community and faith.
 """,
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
                           ),
                     ),
                     const SizedBox(height: 40),

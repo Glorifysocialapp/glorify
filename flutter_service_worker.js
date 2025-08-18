@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "bfcfe61f91e48d6500aa1e06b75737d7",
+const RESOURCES = {"flutter_bootstrap.js": "2f6407560fca9dd22a58345accf95d45",
 "flutter.js": "888483df48293866f9f41d3d9274a779",
 "favicon.png": "ee96f5f891032c860b0bef0abaff5802",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
@@ -25,8 +25,8 @@ const RESOURCES = {"flutter_bootstrap.js": "bfcfe61f91e48d6500aa1e06b75737d7",
 "canvaskit/canvaskit.wasm": "07b9f5853202304d3b0749d9306573cc",
 "canvaskit/canvaskit.js.symbols": "58832fbed59e00d2190aa295c4d70360",
 "main.dart.js": "67ff7ab2dcb3b5167a6323de3e469fe2",
-"index.html": "45f2f17c37d2e23f2b52b0b61d7fad0c",
-"/": "45f2f17c37d2e23f2b52b0b61d7fad0c",
+"index.html": "37ec6ff67dbd7c0724e8f5cc58fe514c",
+"/": "37ec6ff67dbd7c0724e8f5cc58fe514c",
 "assets/packages/flutter_chat_ui/assets/3.0x/icon-seen.png": "684348b596f7960e59e95cff5475b2f8",
 "assets/packages/flutter_chat_ui/assets/3.0x/icon-document.png": "4578cb3d3f316ef952cd2cf52f003df2",
 "assets/packages/flutter_chat_ui/assets/3.0x/icon-arrow.png": "3ea423a6ae14f8f6cf1e4c39618d3e4b",

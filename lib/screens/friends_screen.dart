@@ -220,7 +220,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                         setModalState(() {}); // Update modal state
                       },
                       decoration: InputDecoration(
-                        hintText: 'Search by name or email...',
+                        hintText: 'Search by name ...',
                         prefixIcon: const Icon(Icons.search),
                         suffixIcon: _isSearching
                             ? const Padding(

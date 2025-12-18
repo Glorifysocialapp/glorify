@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:cu_app_glorify/services/api_service.dart';
-import 'package:cu_app_glorify/models/post.dart';
+
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});

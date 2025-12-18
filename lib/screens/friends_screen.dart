@@ -21,6 +21,7 @@ class _FriendsScreenState extends State<FriendsScreen>
   List<FriendRequest> _friendRequests = [];
   List<FriendRequest> _sentFriendRequests = [];
   bool _isLoading = true;
+  // ignore: unused_field
   int _selectedTab = 0;
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();

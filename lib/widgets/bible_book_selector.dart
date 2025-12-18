@@ -17,6 +17,7 @@ class BibleBookSelector extends StatefulWidget {
 }
 
 class _BibleBookSelectorState extends State<BibleBookSelector> {
+  // ignore: unused_field
   String _searchQuery = '';
   late List<String> _filteredBooks;
 

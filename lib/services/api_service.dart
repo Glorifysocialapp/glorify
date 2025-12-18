@@ -526,78 +526,7 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
     await prefs.remove('user_id');
   }
 
-  // Sample data methods for demo purposes
-  BibleChapter _getSampleBibleChapter(String book, int chapter) {
-    return BibleChapter(
-      book: book,
-      chapter: chapter,
-      verses: [
-        BibleVerse(
-            book: book,
-            chapter: chapter,
-            verse: 1,
-            text:
-                "In the beginning was the Word, and the Word was with God, and the Word was God."),
-        BibleVerse(
-            book: book,
-            chapter: chapter,
-            verse: 2,
-            text: "He was with God in the beginning."),
-        BibleVerse(
-            book: book,
-            chapter: chapter,
-            verse: 3,
-            text:
-                "Through him all things were made; without him nothing was made that has been made."),
-        BibleVerse(
-            book: book,
-            chapter: chapter,
-            verse: 4,
-            text:
-                "In him was life, and that life was the light of all mankind."),
-        BibleVerse(
-            book: book,
-            chapter: chapter,
-            verse: 5,
-            text:
-                "The light shines in the darkness, and the darkness has not overcome it."),
-      ],
-    );
-  }
-
-  List<String> _getSampleBibleBooks() {
-    return [
-      'Genesis',
-      'Exodus',
-      'Leviticus',
-      'Numbers',
-      'Deuteronomy',
-      'Joshua',
-      'Judges',
-      'Ruth',
-      '1 Samuel',
-      '2 Samuel',
-      'Matthew',
-      'Mark',
-      'Luke',
-      'John',
-      'Acts',
-      'Romans',
-      '1 Corinthians',
-      '2 Corinthians',
-      'Galatians',
-      'Ephesians',
-    ];
-  }
-
-  List<Note> _getSampleNotes(String userId) {
-    return [];
-  }
-
-  List<Post> _getSamplePosts() {
-    return [];
-  }
-
+ 
   List<User> _getSampleFriends() {
     return [];
   }

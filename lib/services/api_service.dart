@@ -612,7 +612,7 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final List<dynamic> messages = json.decode(response.body);
-      return messages;
+      return messages.reversed.toList();
     } else {
       throw Exception('Failed to load messages');
     }

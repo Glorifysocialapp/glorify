@@ -621,12 +621,9 @@ class ApiService {
   Future<void> markMessagesRead(String senderId, String recipientId) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/mark_messages_read'),
+        Uri.parse('$baseUrl/mark_messages_read/$recipientId/$senderId'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'sender_id': senderId,
-          'recipient_id': recipientId,
-        }),
+        
       );
 
       if (response.statusCode != 200) {

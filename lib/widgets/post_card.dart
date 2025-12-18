@@ -30,7 +30,7 @@ class PostCard extends StatelessWidget {
               height: 300,
               child: Image.network(
                 post.mediaUrl!,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           if (post.mediaType == 'video') VideoPlayerWidget(url: post.mediaUrl!),

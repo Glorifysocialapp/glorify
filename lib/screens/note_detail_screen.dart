@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/note.dart';
-import 'package:cu_app/services/api_service.dart';
+import 'package:cu_app_glorify/models/note.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
 
 class NoteDetailScreen extends StatefulWidget {
   final Note? note;

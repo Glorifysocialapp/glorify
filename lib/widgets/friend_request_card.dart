@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/friend_request.dart';
+import 'package:cu_app_glorify/models/friend_request.dart';
 
 class FriendRequestCard extends StatelessWidget {
   final FriendRequest friendRequest;

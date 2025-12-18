@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:cu_app/screens/verification_code_screen.dart';
+import 'package:cu_app_glorify/screens/verification_code_screen.dart';
 
 class ForgotPasswordEmailScreen extends StatefulWidget {
   const ForgotPasswordEmailScreen({super.key});

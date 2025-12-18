@@ -1,11 +1,11 @@
-import 'package:cu_app/services/theme_provider.dart';
+import 'package:cu_app_glorify/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cu_app/theme.dart';
-import 'package:cu_app/screens/auth_screen.dart';
-import 'package:cu_app/services/notification_service.dart';
+import 'package:cu_app_glorify/theme.dart';
+import 'package:cu_app_glorify/screens/auth_screen.dart';
+import 'package:cu_app_glorify/services/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cu_app/screens/main_navigation.dart'; // Import MainNavigation
+import 'package:cu_app_glorify/screens/main_navigation.dart'; // Import MainNavigation
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

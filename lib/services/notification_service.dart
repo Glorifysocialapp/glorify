@@ -1,9 +1,9 @@
-import 'package:cu_app/services/api_service.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
+// import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class NotificationService {

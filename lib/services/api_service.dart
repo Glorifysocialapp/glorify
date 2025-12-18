@@ -1,23 +1,23 @@
-import 'package:cu_app/models/account.dart';
+import 'package:cu_app_glorify/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:cu_app/models/bible_verse.dart';
-import 'package:cu_app/models/note.dart';
-import 'package:cu_app/models/post.dart';
-import 'package:cu_app/models/user.dart';
-import 'package:cu_app/models/friend_request.dart';
-import 'package:cu_app/models/activity_item.dart'; // Import ActivityItem
-import 'package:cu_app/models/notification.dart';
+import 'package:cu_app_glorify/models/bible_verse.dart';
+import 'package:cu_app_glorify/models/note.dart';
+import 'package:cu_app_glorify/models/post.dart';
+import 'package:cu_app_glorify/models/user.dart';
+import 'package:cu_app_glorify/models/friend_request.dart';
+import 'package:cu_app_glorify/models/activity_item.dart'; // Import ActivityItem
+import 'package:cu_app_glorify/models/notification.dart';
 
 class ApiService {
   static const String baseUrl = 'https://glorify-server.onrender.com';
 
-  Future<String?> _getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('user_token');
-  }
+//   Future<String?> _getToken() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     return prefs.getString('user_token');
+//   }
 
   Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
@@ -556,7 +556,7 @@ class ApiService {
 
         // Ensure required keys are present with defaults
         return Account(
-          email: jsonMap['email'] ?? '',
+          
           friendIds: List<String>.from(jsonMap['friendIds'] ?? []),
           id: jsonMap['id'] ?? '',
           joinDate: jsonMap['joinDate'] ?? '',
@@ -603,23 +603,18 @@ class ApiService {
   }
 
   Future<List<dynamic>> getMessages(String user1Id, String user2Id) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/get_messages?user1_id=$user1Id&user2_id=$user2Id'),
-        headers: {'Content-Type': 'application/json'},
-      );
+    final response = await http.get(
+      Uri.parse(
+        '$baseUrl/get_messages?user1_id=$user1Id&user2_id=$user2Id',
+      ),
+      headers: {'Content-Type': 'application/json'},
+    );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        return data['messages'] ?? [];
-      } else {
-        final errorData = json.decode(response.body);
-        throw Exception(
-            'Failed to load messages: ${errorData['message'] ?? 'Unknown error'}');
-      }
-    } catch (e) {
-      print('Error getting messages: $e');
-      rethrow;
+    if (response.statusCode == 200) {
+      final List<dynamic> messages = json.decode(response.body);
+      return messages;
+    } else {
+      throw Exception('Failed to load messages');
     }
   }
 

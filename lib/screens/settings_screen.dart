@@ -1,7 +1,7 @@
-import 'package:cu_app/screens/auth_screen.dart';
+import 'package:cu_app_glorify/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cu_app/services/theme_provider.dart';
+import 'package:cu_app_glorify/services/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {

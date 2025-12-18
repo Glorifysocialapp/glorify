@@ -1,11 +1,11 @@
-import 'package:cu_app/screens/chat_screen.dart';
+import 'package:cu_app_glorify/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/user.dart';
-import 'package:cu_app/models/friend_request.dart';
-import 'package:cu_app/services/api_service.dart';
-import 'package:cu_app/widgets/friend_card.dart';
-import 'package:cu_app/widgets/friend_request_card.dart';
-import 'package:cu_app/screens/profile_screen.dart';
+import 'package:cu_app_glorify/models/user.dart';
+import 'package:cu_app_glorify/models/friend_request.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
+import 'package:cu_app_glorify/widgets/friend_card.dart';
+import 'package:cu_app_glorify/widgets/friend_request_card.dart';
+import 'package:cu_app_glorify/screens/profile_screen.dart';
 
 class FriendsScreen extends StatefulWidget {
   const FriendsScreen({super.key});
@@ -269,7 +269,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      'Try searching with a different name or email.',
+                                      'Try searching with a different name.',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -324,7 +324,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                                     itemBuilder: (context, index) {
                                       final user = _searchResults[index];
                                       print(
-                                          'Rendering user: ${user.name}, Email: ${user.email}'); // Debug print
+                                          'Rendering user: ${user.name}'); // Debug print
                                       return ListTile(
                                         leading: CircleAvatar(
                                           backgroundImage: user
@@ -336,9 +336,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                                               : null,
                                         ),
                                         title: Text(user.name),
-                                        subtitle: Text(user.email.isNotEmpty
-                                            ? user.email
-                                            : 'No email'),
+                                       
                                         trailing: IconButton(
                                           icon: const Icon(Icons.person_add),
                                           onPressed: () =>
@@ -362,24 +360,7 @@ class _FriendsScreenState extends State<FriendsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Icon(Icons.people, color: Colors.white),
-            const SizedBox(width: 8),
-            const Text(
-              'Friends',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_add, color: Colors.white),
-            onPressed: _showFindFriendsDialog,
-          ),
-        ],
+      
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
@@ -502,7 +483,7 @@ class _FriendsScreenState extends State<FriendsScreen>
           final friend = _friends[index];
           return FriendCard(
             user: friend,
-            onTap: () => _viewFriendProfile(friend),
+            onTap: () => _messageFriend(friend),
             onMessage: () => _messageFriend(friend),
             onRemove: () => _removeFriend(friend),
           );

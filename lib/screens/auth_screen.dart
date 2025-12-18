@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/services/api_service.dart';
-import 'package:cu_app/screens/main_navigation.dart';
-import 'package:cu_app/screens/terms_and_conditions_screen.dart';
-import 'package:cu_app/screens/forgot_password_email_screen.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
+import 'package:cu_app_glorify/screens/main_navigation.dart';
+import 'package:cu_app_glorify/screens/forgot_password_email_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 

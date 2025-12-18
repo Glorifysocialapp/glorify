@@ -1,12 +1,12 @@
-import 'package:cu_app/models/user.dart';
-import 'package:cu_app/services/api_service.dart';
+import 'package:cu_app_glorify/models/user.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:cu_app/services/notification_service.dart';
+import 'package:cu_app_glorify/services/notification_service.dart';
 
 class ChatScreen extends StatefulWidget {
   final User friend;

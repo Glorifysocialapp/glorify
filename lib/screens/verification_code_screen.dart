@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:cu_app/screens/reset_password_screen.dart';
+import 'package:cu_app_glorify/screens/reset_password_screen.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
   final String email;

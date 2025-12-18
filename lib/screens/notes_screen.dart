@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/note.dart';
-import 'package:cu_app/services/api_service.dart';
-import 'package:cu_app/screens/note_detail_screen.dart';
-import 'package:cu_app/widgets/note_card.dart';
+import 'package:cu_app_glorify/models/note.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
+import 'package:cu_app_glorify/screens/note_detail_screen.dart';
+import 'package:cu_app_glorify/widgets/note_card.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
@@ -16,7 +16,7 @@ class _NotesScreenState extends State<NotesScreen> with TickerProviderStateMixin
   List<Note> _notes = [];
   List<Note> _filteredNotes = [];
   bool _isLoading = true;
-  String _searchQuery = '';
+//   String _searchQuery = '';
   late AnimationController _slideController;
   late Animation<Offset> _slideAnimation;
 
@@ -65,16 +65,16 @@ class _NotesScreenState extends State<NotesScreen> with TickerProviderStateMixin
     }
   }
 
-  void _filterNotes(String query) {
-    setState(() {
-      _searchQuery = query;
-      _filteredNotes = _notes.where((note) {
-        return note.title.toLowerCase().contains(query.toLowerCase()) ||
-            note.content.toLowerCase().contains(query.toLowerCase()) ||
-            note.tags.any((tag) => tag.toLowerCase().contains(query.toLowerCase()));
-      }).toList();
-    });
-  }
+//   void _filterNotes(String query) {
+//     setState(() {
+//       _searchQuery = query;
+//       _filteredNotes = _notes.where((note) {
+//         return note.title.toLowerCase().contains(query.toLowerCase()) ||
+//             note.content.toLowerCase().contains(query.toLowerCase()) ||
+//             note.tags.any((tag) => tag.toLowerCase().contains(query.toLowerCase()));
+//       }).toList();
+//     });
+//   }
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

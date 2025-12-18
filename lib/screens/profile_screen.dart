@@ -1,8 +1,8 @@
 
-import 'package:cu_app/screens/edit_profile_screen.dart';
+import 'package:cu_app_glorify/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/user.dart';
-import 'package:cu_app/services/api_service.dart';
+import 'package:cu_app_glorify/models/user.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   final User user;

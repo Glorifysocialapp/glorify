@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/post.dart';
-import 'package:cu_app/services/api_service.dart';
-import 'package:cu_app/widgets/post_card.dart';
-import 'package:cu_app/screens/create_post_screen.dart';
+import 'package:cu_app_glorify/models/post.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
+import 'package:cu_app_glorify/widgets/post_card.dart';
+import 'package:cu_app_glorify/screens/create_post_screen.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});

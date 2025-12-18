@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:cu_app/screens/main_navigation.dart';
+import 'package:cu_app_glorify/screens/main_navigation.dart';
 
 class TermsAndConditionsScreen extends StatefulWidget {
   const TermsAndConditionsScreen({super.key});

@@ -23,12 +23,17 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['_id'], // Map _id to id
-      name: json['username'], // Map username to name
-      email: json['email'] ?? '', // Provide default for email
-      profileImage: json['profileImage'] ?? '', // Provide default for profileImage
-      joinDate: json['joinDate'] != null ? DateTime.parse(json['joinDate']) : DateTime.now(), // Provide default for joinDate
-      friendIds: List<String>.from(json['friendIds'] ?? []),
+      // Handle both 'id' and '_id' from different endpoints
+      id: json['id'] ?? json['_id'] ?? '',
+      // Handle both 'name' and 'username' from different endpoints
+      name: json['name'] ?? json['username'] ?? '',
+      email: json['email'] ?? '',
+      profileImage: json['profileImage'] ?? '',
+      joinDate: json['joinDate'] != null
+          ? DateTime.parse(json['joinDate'])
+          : DateTime.now(),
+      friendIds:
+          json['friendIds'] != null ? List<String>.from(json['friendIds']) : [],
       postsCount: json['postsCount'] ?? 0,
       notesCount: json['notesCount'] ?? 0,
       hasUnreadMessages: json['hasUnreadMessages'] ?? false,

@@ -3,8 +3,8 @@ import '../services/api_service.dart';
 import '../models/account.dart';
 import '../models/activity_item.dart'; // Add this import
 import '../screens/settings_screen.dart'; // Assuming you have this
-import 'package:cu_app/screens/edit_profile_screen.dart';
-import 'package:cu_app/screens/notification_screen.dart';
+import 'package:cu_app_glorify/screens/edit_profile_screen.dart';
+import 'package:cu_app_glorify/screens/notification_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -269,15 +269,7 @@ class _AccountScreenState extends State<AccountScreen>
                                 fontWeight: FontWeight.bold,
                               ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _account!.email.isNotEmpty
-                          ? _account!.email
-                          : 'No email provided',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withOpacity(0.9),
-                          ),
-                    ),
+                    
                     const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -725,14 +717,14 @@ class _AccountScreenState extends State<AccountScreen>
     }
   }
 
-  void _editProfile() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Edit profile feature coming soon!'),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
+//   void _editProfile() {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(
+//         content: Text('Edit profile feature coming soon!'),
+//         behavior: SnackBarBehavior.floating,
+//       ),
+//     );
+//   }
 
   void _privacySettings() {
     ScaffoldMessenger.of(context).showSnackBar(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/screens/bible_screen.dart';
-import 'package:cu_app/screens/notes_screen.dart';
-import 'package:cu_app/screens/feed_screen.dart';
-import 'package:cu_app/screens/friends_screen.dart';
-import 'package:cu_app/screens/account_screen.dart';
-import 'package:cu_app/screens/notification_screen.dart';
+import 'package:cu_app_glorify/screens/bible_screen.dart';
+import 'package:cu_app_glorify/screens/notes_screen.dart';
+import 'package:cu_app_glorify/screens/feed_screen.dart';
+import 'package:cu_app_glorify/screens/friends_screen.dart';
+import 'package:cu_app_glorify/screens/account_screen.dart';
+import 'package:cu_app_glorify/screens/notification_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});

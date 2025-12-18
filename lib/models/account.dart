@@ -1,5 +1,5 @@
 class Account {
-  final String email;
+  
   final List<String> friendIds;
   final String id;
   final String joinDate;
@@ -9,7 +9,6 @@ class Account {
   final String profileImage;
 
   Account({
-    required this.email,
     required this.friendIds,
     required this.id,
     required this.joinDate,
@@ -21,7 +20,7 @@ class Account {
 
   factory Account.fromJson(Map<String, dynamic> json) {
     return Account(
-      email: json['email'] ?? '',
+      
       friendIds: List<String>.from(json['friendIds'] ?? []),
       id: json['id'] ?? '',
       joinDate: json['joinDate'] ?? '',

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/services/api_service.dart';
-import 'package:cu_app/models/bible_verse.dart';
-import 'package:cu_app/widgets/bible_book_selector.dart';
-import 'package:cu_app/widgets/bible_chapter_view.dart';
+import 'package:cu_app_glorify/services/api_service.dart';
+import 'package:cu_app_glorify/models/bible_verse.dart';
+import 'package:cu_app_glorify/widgets/bible_book_selector.dart';
+import 'package:cu_app_glorify/widgets/bible_chapter_view.dart';
 
 class BibleScreen extends StatefulWidget {
   const BibleScreen({super.key});

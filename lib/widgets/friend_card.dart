@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cu_app/models/user.dart';
+import 'package:cu_app_glorify/models/user.dart';
 
 class FriendCard extends StatelessWidget {
   final User user;

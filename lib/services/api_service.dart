@@ -1,6 +1,6 @@
 import 'package:cu_app_glorify/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:typed_data';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cu_app_glorify/models/bible_verse.dart';
@@ -209,7 +209,7 @@ class ApiService {
   }
 
   // Posts endpoints
-  Future<List<Post>> getFeedPosts(String userId) async {
+Future<List<Post>> getFeedPosts(String userId) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/posts/feed/$userId'),
@@ -223,7 +223,7 @@ class ApiService {
         throw Exception('Failed to load posts');
       }
     } catch (e) {
-      return _getSamplePosts();
+      return [];
     }
   }
 
@@ -245,7 +245,73 @@ class ApiService {
     }
   }
 
-  // Friends endpoints
+  // Upload image to server/cloud and get URL
+Future<String> uploadImage(Uint8List bytes, String fileName) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('$baseUrl/upload'));
+
+    request.files.add(http.MultipartFile.fromBytes(
+      'file',
+      bytes,
+      filename: fileName,
+    ));
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      var respStr = await response.stream.bytesToString();
+      var data = json.decode(respStr);
+      return data['url'];
+    } else {
+      var respStr = await response.stream.bytesToString();
+      throw Exception('Failed to upload image: $respStr');
+    }
+  }
+
+
+  // Create post with optional media
+  Future<void> createPostWithMedia({
+    required String content,
+    Uint8List? mediaBytes,
+    String? mediaFileName,
+    String? mediaType, // 'image', 'video', etc.
+    String? verseReference,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('user_id');
+    final userName = prefs.getString('user_name');
+    final profileImage = prefs.getString('user_profile_image') ?? '';
+
+    String? mediaUrl;
+    if (mediaBytes != null && mediaFileName != null) {
+      // Upload image first
+      mediaUrl = await uploadImage(mediaBytes, mediaFileName);
+      mediaType ??= 'image'; // default to image if not set
+    }
+
+    final body = {
+      'userId': userId,
+      'userName': userName,
+      'userProfileImage': profileImage,
+      'content': content,
+      'mediaUrl': mediaUrl,
+      'mediaType': mediaType,
+      'verseReference': verseReference,
+      'createdAt': DateTime.now().toIso8601String(),
+    };
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/posts'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(body),
+    );
+
+  if (response.statusCode != 201) {
+    throw Exception('Failed to create post');
+  }
+}
+
+// Friends endpoints
   Future<List<User>> getFriends(String userId) async {
     try {
       final response = await http.get(

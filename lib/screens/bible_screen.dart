@@ -146,7 +146,7 @@ class _BibleScreenState extends State<BibleScreen> with TickerProviderStateMixin
             ),
             const SizedBox(height: 20),
             Text(
-              'Select Chapter',
+              'Select Chapter  (Scroll to select)',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20),

@@ -4,7 +4,8 @@ class Post {
   final String userName;
   final String userProfileImage;
   final String content;
-  final String? imageUrl;
+  final String? mediaUrl; // NEW
+  final String? mediaType; // image | video
   final DateTime createdAt;
   final int likesCount;
   final int commentsCount;
@@ -17,7 +18,8 @@ class Post {
     required this.userName,
     required this.userProfileImage,
     required this.content,
-    this.imageUrl,
+    this.mediaUrl,
+    this.mediaType,
     required this.createdAt,
     this.likesCount = 0,
     this.commentsCount = 0,
@@ -27,12 +29,13 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'],
+      id: json['_id'] ?? json['id'],
       userId: json['userId'],
       userName: json['userName'],
-      userProfileImage: json['userProfileImage'] ?? '',
+      userProfileImage: json['userProfileImage'],
       content: json['content'],
-      imageUrl: json['imageUrl'],
+      mediaUrl: json['mediaUrl'],
+      mediaType: json['mediaType'],
       createdAt: DateTime.parse(json['createdAt']),
       likesCount: json['likesCount'] ?? 0,
       commentsCount: json['commentsCount'] ?? 0,
@@ -41,6 +44,7 @@ class Post {
     );
   }
 
+  /// OLD POSTS STILL WORK
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -48,11 +52,21 @@ class Post {
       'userName': userName,
       'userProfileImage': userProfileImage,
       'content': content,
-      'imageUrl': imageUrl,
       'createdAt': createdAt.toIso8601String(),
-      'likesCount': likesCount,
-      'commentsCount': commentsCount,
-      'isLiked': isLiked,
+      'verseReference': verseReference,
+    };
+  }
+
+  /// NEW — MEDIA POSTS
+  Map<String, dynamic> toJsonWithMedia() {
+    return {
+      'userId': userId,
+      'userName': userName,
+      'userProfileImage': userProfileImage,
+      'content': content,
+      'mediaUrl': mediaUrl,
+      'mediaType': mediaType,
+      'createdAt': createdAt.toIso8601String(),
       'verseReference': verseReference,
     };
   }

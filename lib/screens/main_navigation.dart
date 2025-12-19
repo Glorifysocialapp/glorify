@@ -14,7 +14,7 @@ class MainNavigation extends StatefulWidget {
 }
 
 class _MainNavigationState extends State<MainNavigation> with TickerProviderStateMixin {
-  int _currentIndex = 0;
+  int _currentIndex = 2;
   late PageController _pageController;
   late AnimationController _animationController;
 
@@ -60,15 +60,23 @@ class _MainNavigationState extends State<MainNavigation> with TickerProviderStat
     ),
   ];
 
-  @override
+ @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+
+    // FeedScreen is index 2
+    _currentIndex = 2;
+
+    _pageController = PageController(
+      initialPage: _currentIndex, // 👈 THIS is the key
+    );
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
   }
+
 
   @override
   void dispose() {

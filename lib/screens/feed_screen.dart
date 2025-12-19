@@ -13,12 +13,10 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final ApiService _apiService = ApiService();
-  final ScrollController _scrollController = ScrollController();
 
   List<Post> _posts = [];
   bool _isLoading = false;
   bool _hasMore = true;
-  // ignore: unused_field
   int _currentPage = 1;
   final int _limit = 10;
 
@@ -26,28 +24,12 @@ class _FeedScreenState extends State<FeedScreen> {
   void initState() {
     super.initState();
     _loadFeed();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  // Triggered whenever the user scrolls
-  void _onScroll() {
-    if (_isLoading || !_hasMore) return;
-
-    // Check if we are near the bottom.
-    // This logic triggers when we are within the range of the last 2-3 items.
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent * 0.8) {
-      _loadFeed();
-    }
   }
 
   Future<void> _loadFeed({bool isRefresh = false}) async {
+    // Prevent multiple simultaneous loads or loading when no more data exists
+    if (_isLoading || (!isRefresh && !_hasMore)) return;
+
     if (isRefresh) {
       setState(() {
         _currentPage = 1;
@@ -56,28 +38,29 @@ class _FeedScreenState extends State<FeedScreen> {
       });
     }
 
-    if (!_hasMore) return;
-
     setState(() => _isLoading = true);
 
     try {
       final userId = await _apiService.getUserId();
-      // Assuming your API service accepts page and limit parameters
-      final newPosts = await _apiService.getFeedPosts(userId!);
+      // Ensure your ApiService.getFeedPosts accepts (userId, page, limit)
+      final newPosts = await _apiService.getFeedPosts(userId!,
+          page: _currentPage, limit: _limit);
 
       setState(() {
         _isLoading = false;
         _posts.addAll(newPosts);
         _currentPage++;
 
-        // If the API returns fewer than the limit, we've reached the end
+        // If server returns fewer than the limit, we've hit the end of the database
         if (newPosts.length < _limit) {
           _hasMore = false;
         }
       });
     } catch (e) {
       setState(() => _isLoading = false);
-      // Handle errors (e.g., show a SnackBar)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error loading feed')),
+      );
     }
   }
 
@@ -100,12 +83,23 @@ class _FeedScreenState extends State<FeedScreen> {
           : RefreshIndicator(
               onRefresh: () => _loadFeed(isRefresh: true),
               child: ListView.builder(
-                controller: _scrollController,
+                // Adding 1 to length to show a loader at the bottom if more posts exist
                 itemCount: _posts.length + (_hasMore ? 1 : 0),
                 itemBuilder: (context, i) {
+                  // --- TRIGGER LOGIC ---
+                  // If we are at the 8th post from the bottom, trigger the load
+                  if (i == _posts.length - 3 && _hasMore && !_isLoading) {
+                    // Using Future.microtask to avoid calling setState during build
+                    Future.microtask(() => _loadFeed());
+                  }
+
+                  // Render Post
                   if (i < _posts.length) {
                     return PostCard(post: _posts[i]);
-                  } else {
+                  }
+
+                  // Render Loader at the very bottom
+                  else {
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 32),
                       child: Center(child: CircularProgressIndicator()),

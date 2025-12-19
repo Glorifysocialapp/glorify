@@ -131,7 +131,12 @@ class ApiService {
         await prefs.setString('user_id', data['user_id']);
         await prefs.setString('user_name', data['username']); // Store user_id
         await prefs.setString('user_profile_image', data['profileImage']);
-        return [data['username'], data['token'], data['user_id'], data['profileImage']];
+        return [
+          data['username'],
+          data['token'],
+          data['user_id'],
+          data['profileImage']
+        ];
       } else {
         return null; // Login failed
       }
@@ -209,10 +214,12 @@ class ApiService {
   }
 
   // Posts endpoints
-Future<List<Post>> getFeedPosts(String userId) async {
+  Future<List<Post>> getFeedPosts(String userId,
+      {int page = 1, int limit = 10}) async {
     try {
+      // We add the page and limit as query parameters
       final response = await http.get(
-        Uri.parse('$baseUrl/posts/feed/$userId'),
+        Uri.parse('$baseUrl/posts/feed/$userId?page=$page&limit=$limit'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -220,9 +227,12 @@ Future<List<Post>> getFeedPosts(String userId) async {
         final List<dynamic> postsList = json.decode(response.body);
         return postsList.map((post) => Post.fromJson(post)).toList();
       } else {
-        throw Exception('Failed to load posts');
+        // It's often better to log the error or handle specific status codes
+        print('Server Error: ${response.statusCode}');
+        return [];
       }
     } catch (e) {
+      print('Network Error: $e');
       return [];
     }
   }
@@ -246,9 +256,8 @@ Future<List<Post>> getFeedPosts(String userId) async {
   }
 
   // Upload image to server/cloud and get URL
-Future<String> uploadImage(Uint8List bytes, String fileName) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse('$baseUrl/upload'));
+  Future<String> uploadImage(Uint8List bytes, String fileName) async {
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/upload'));
 
     request.files.add(http.MultipartFile.fromBytes(
       'file',
@@ -267,7 +276,6 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
       throw Exception('Failed to upload image: $respStr');
     }
   }
-
 
   // Create post with optional media
   Future<void> createPostWithMedia({
@@ -306,10 +314,10 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
       body: json.encode(body),
     );
 
-  if (response.statusCode != 201) {
-    throw Exception('Failed to create post');
+    if (response.statusCode != 201) {
+      throw Exception('Failed to create post');
+    }
   }
-}
 
 // Friends endpoints
   Future<List<User>> getFriends(String userId) async {
@@ -526,7 +534,6 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
     await prefs.remove('user_id');
   }
 
- 
   List<User> _getSampleFriends() {
     return [];
   }
@@ -551,7 +558,6 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
 
         // Ensure required keys are present with defaults
         return Account(
-          
           friendIds: List<String>.from(jsonMap['friendIds'] ?? []),
           id: jsonMap['id'] ?? '',
           joinDate: jsonMap['joinDate'] ?? '',
@@ -618,7 +624,6 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
       final response = await http.post(
         Uri.parse('$baseUrl/mark_messages_read/$recipientId/$senderId'),
         headers: {'Content-Type': 'application/json'},
-        
       );
 
       if (response.statusCode != 200) {
@@ -667,7 +672,7 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
     }
   }
 
-    Future<bool> isUserOnline(String userId) async {
+  Future<bool> isUserOnline(String userId) async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/is_online/$userId'));
       if (response.statusCode == 200) {
@@ -714,5 +719,4 @@ Future<String> uploadImage(Uint8List bytes, String fileName) async {
       rethrow;
     }
   }
-
 }

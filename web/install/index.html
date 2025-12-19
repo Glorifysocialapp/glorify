@@ -1,86 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Install Glorify</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install Glorify</title>
+    
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" href="../favicon.ico">
 
-  <!-- PWA manifest -->
-  <link rel="manifest" href="/glorify/manifest.json">
-  <meta name="theme-color" content="#0175C2">
+    <style>
+        :root {
+            --primary-color: #007AFF; /* Change this to your brand color */
+            --bg-color: #f2f2f7;
+            --card-bg: #ffffff;
+            --text-main: #1c1c1e;
+            --text-dim: #8e8e93;
+        }
 
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-    button {
-      font-size: 18px;
-      padding: 14px 22px;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-  </style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .install-card {
+            background: var(--card-bg);
+            padding: 40px 24px;
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 22%;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+        }
+
+        .tagline {
+            color: var(--text-dim);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        #install-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease;
+            display: none; /* Hidden until browser triggers event */
+        }
+
+        #install-button:active {
+            transform: scale(0.96);
+        }
+
+        .ios-guide {
+            display: none;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .ios-guide img {
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+
+        #status-msg {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
-
 <body>
 
-  <h1>Install Glorify</h1>
-  <p id="status">Get the full app experience</p>
-  <button id="installBtn">Install App</button>
+    <div class="install-card">
+        <img src="../icons/icon.png" alt="Glorify Logo" class="app-icon">
+        <h1>Glorify</h1>
+        <p class="tagline">The social experience you've been waiting for.</p>
 
-  <script>
-    const status = document.getElementById('status');
-    const installBtn = document.getElementById('installBtn');
-    let deferredPrompt = null;
+        <button id="install-button">Install App</button>
 
-    // Register the service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/glorify/flutter_service_worker.js')
-        .then(() => console.log('SW registered'))
-        .catch(err => console.log('SW registration failed', err));
-    }
+        <div id="ios-guide" class="ios-guide">
+            <p><strong>To install on iPhone:</strong></p>
+            <ol>
+                <li>Tap the <strong>Share</strong> button <img src="https://img.icons8.com/ios/24/000000/forward-arrow.png" width="18" alt="share icon"> at the bottom of the screen.</li>
+                <li>Scroll down and select <strong>Add to Home Screen</strong>.</li>
+                <li>Tap <strong>Add</strong> in the top right corner.</li>
+            </ol>
+        </div>
 
-    // Redirect if already installed
-    if (window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true) {
-      window.location.replace('/glorify/');
-    }
+        <p id="status-msg" class="hidden">Checking app status...</p>
+    </div>
 
-    // Detect iOS
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    if (isIOS) {
-      status.innerHTML = 'On iPhone / iPad: Tap <b>Share</b> → <b>Add to Home Screen</b>';
-      installBtn.style.display = 'none';
-    }
+    <script>
+        const installBtn = document.getElementById('install-button');
+        const iosGuide = document.getElementById('ios-guide');
+        const statusMsg = document.getElementById('status-msg');
+        let deferredPrompt;
 
-    // Capture beforeinstallprompt
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      status.textContent = 'Ready to install!';
-    });
+        // 1. Check if already installed (standalone mode)
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-    // Handle Install button click
-    installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        // App not yet primed, open main app to trigger SW/manifest
-        status.textContent = 'Preparing app for install…';
-        window.location.replace('/glorify/');
-        return;
-      }
+        if (isStandalone) {
+            statusMsg.innerText = "Glorify is already installed on your device!";
+            statusMsg.classList.remove('hidden');
+        } else {
+            // 2. Detect iOS
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            
+            if (isIos) {
+                iosGuide.style.display = 'block';
+            } else {
+                // 3. Logic for Chrome/Android
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    // Prevent default mini-infobar
+                    e.preventDefault();
+                    // Save event
+                    deferredPrompt = e;
+                    // Show our custom button
+                    installBtn.style.display = 'block';
+                });
 
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-    });
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            installBtn.style.display = 'none';
+                        }
+                        deferredPrompt = null;
+                    }
+                });
+            }
+        }
 
-    // Redirect after installation
-    window.addEventListener('appinstalled', () => {
-      window.location.href = '/glorify/';
-    });
-  </script>
-
+        // Notify if the app was successfully installed
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            installBtn.style.display = 'none';
+            statusMsg.innerText = "App installed successfully!";
+            statusMsg.classList.remove('hidden');
+        });
+    </script>
 </body>
 </html>

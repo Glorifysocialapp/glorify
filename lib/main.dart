@@ -1,32 +1,58 @@
-import 'package:cu_app_glorify/services/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cu_app_glorify/theme.dart';
-import 'package:cu_app_glorify/screens/auth_screen.dart';
-import 'package:cu_app_glorify/services/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cu_app_glorify/screens/main_navigation.dart'; // Import MainNavigation
 
-void main() async {
+import 'package:cu_app_glorify/services/theme_provider.dart';
+import 'package:cu_app_glorify/services/notification_service.dart';
+import 'package:cu_app_glorify/theme.dart';
+import 'package:cu_app_glorify/screens/auth_screen.dart';
+import 'package:cu_app_glorify/screens/main_navigation.dart';
+
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService.initialize();
-
-  final prefs = await SharedPreferences.getInstance();
-  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-  print('DEBUG: isLoggedIn on app start: $isLoggedIn'); // Debug print
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      child: ChurchApp(isLoggedIn: isLoggedIn),
+      create: (_) => ThemeProvider(),
+      child: const ChurchApp(),
     ),
   );
 }
 
-class ChurchApp extends StatelessWidget {
-  final bool? isLoggedIn;
+class ChurchApp extends StatefulWidget {
+  const ChurchApp({super.key});
 
-  const ChurchApp({super.key, this.isLoggedIn});
+  @override
+  State<ChurchApp> createState() => _ChurchAppState();
+}
+
+class _ChurchAppState extends State<ChurchApp> {
+  bool? _isLoggedIn;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 🔥 Run heavy work AFTER first frame (critical for web)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeApp();
+    });
+  }
+
+  Future<void> _initializeApp() async {
+    // Notifications (safe on mobile, slow on web if blocking)
+    await NotificationService.initialize();
+
+    // SharedPreferences (IndexedDB on web – slow if awaited in main)
+    final prefs = await SharedPreferences.getInstance();
+    final loggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoggedIn = loggedIn;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +64,27 @@ class ChurchApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeProvider.themeMode,
-      home: (isLoggedIn ?? false) ? const MainNavigation() : const AuthScreen(),
+
+      // 👇 Instant render, then route switch
+      home: _isLoggedIn == null
+          ? const SplashScreen()
+          : _isLoggedIn!
+              ? const MainNavigation()
+              : const AuthScreen(),
+    );
+  }
+}
+
+/// Simple instant splash to avoid white screen
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

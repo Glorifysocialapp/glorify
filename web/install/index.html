@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Install App</title>
+  <title>Install Glorify</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- PWA essentials -->
-  <link rel="manifest" href="/manifest.json">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="/glorify/manifest.json">
   <meta name="theme-color" content="#0175C2">
 
   <style>
@@ -26,7 +26,7 @@
 
 <body>
 
-  <h1>Install App</h1>
+  <h1>Install Glorify</h1>
   <p id="status">Get the full app experience</p>
   <button id="installBtn">Install App</button>
 
@@ -35,10 +35,17 @@
     const installBtn = document.getElementById('installBtn');
     let deferredPrompt = null;
 
+    // Register the service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/glorify/flutter_service_worker.js')
+        .then(() => console.log('SW registered'))
+        .catch(err => console.log('SW registration failed', err));
+    }
+
     // Redirect if already installed
     if (window.matchMedia('(display-mode: standalone)').matches ||
         window.navigator.standalone === true) {
-      window.location.replace('/');
+      window.location.replace('/glorify/');
     }
 
     // Detect iOS
@@ -48,7 +55,7 @@
       installBtn.style.display = 'none';
     }
 
-    // Listen for beforeinstallprompt
+    // Capture beforeinstallprompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -58,13 +65,12 @@
     // Handle Install button click
     installBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        // App not yet ready, prime by opening / in same tab
+        // App not yet primed, open main app to trigger SW/manifest
         status.textContent = 'Preparing app for install…';
-        window.location.replace('/'); // Temporarily open main app
+        window.location.replace('/glorify/');
         return;
       }
 
-      // Prompt installation
       deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       deferredPrompt = null;
@@ -72,7 +78,7 @@
 
     // Redirect after installation
     window.addEventListener('appinstalled', () => {
-      window.location.href = '/';
+      window.location.href = '/glorify/';
     });
   </script>
 

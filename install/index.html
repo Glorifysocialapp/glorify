@@ -5,6 +5,7 @@
   <title>Install App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- PWA essentials -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0175C2">
 
@@ -27,8 +28,6 @@
 
   <h1>Install App</h1>
   <p id="status">Get the full app experience</p>
-
-  <!-- ALWAYS visible button -->
   <button id="installBtn">Install App</button>
 
   <script>
@@ -37,42 +36,41 @@
     let deferredPrompt = null;
 
     // Redirect if already installed
-    if (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true
-    ) {
+    if (window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true) {
       window.location.replace('/');
     }
 
+    // Detect iOS
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-    // iOS instructions
     if (isIOS) {
-      status.innerHTML =
-        'On iPhone / iPad:<br>Tap <b>Share</b> → <b>Add to Home Screen</b>';
+      status.innerHTML = 'On iPhone / iPad: Tap <b>Share</b> → <b>Add to Home Screen</b>';
       installBtn.style.display = 'none';
     }
 
-    // Capture install prompt
+    // Listen for beforeinstallprompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
+      status.textContent = 'Ready to install!';
     });
 
-    // Button behavior
+    // Handle Install button click
     installBtn.addEventListener('click', async () => {
       if (!deferredPrompt) {
-        status.textContent =
-          'Install is not available yet. Try refreshing or opening the app homepage first.';
+        // App not yet ready, prime by opening / in same tab
+        status.textContent = 'Preparing app for install…';
+        window.location.replace('/'); // Temporarily open main app
         return;
       }
 
+      // Prompt installation
       deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       deferredPrompt = null;
     });
 
-    // Redirect after install
+    // Redirect after installation
     window.addEventListener('appinstalled', () => {
       window.location.href = '/';
     });

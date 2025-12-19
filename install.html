@@ -5,29 +5,38 @@
   <title>Install App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- PWA essentials -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0175C2">
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    button {
+      font-size: 18px;
+      padding: 14px 22px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
-<body style="text-align:center; padding:40px; font-family:system-ui, sans-serif;">
+<body>
 
   <h1>Install App</h1>
-  <p>Get the full app experience</p>
+  <p id="status">Get the full app experience</p>
 
-  <button id="installBtn" style="display:none; font-size:18px; padding:14px 22px;">
-    Install App
-  </button>
-
-  <div id="iosHelp" style="display:none;">
-    <p>
-      On iPhone / iPad:<br>
-      Tap <strong>Share</strong> → <strong>Add to Home Screen</strong>
-    </p>
-  </div>
+  <!-- ALWAYS visible button -->
+  <button id="installBtn">Install App</button>
 
   <script>
-    /* 1️⃣ Redirect if already installed */
+    const status = document.getElementById('status');
+    const installBtn = document.getElementById('installBtn');
+    let deferredPrompt = null;
+
+    // Redirect if already installed
     if (
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true
@@ -36,30 +45,34 @@
     }
 
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    let deferredPrompt = null;
 
-    /* 2️⃣ Listen for install availability */
+    // iOS instructions
+    if (isIOS) {
+      status.innerHTML =
+        'On iPhone / iPad:<br>Tap <b>Share</b> → <b>Add to Home Screen</b>';
+      installBtn.style.display = 'none';
+    }
+
+    // Capture install prompt
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      document.getElementById('installBtn').style.display = 'inline-block';
     });
 
-    /* 3️⃣ Trigger install */
-    document.getElementById('installBtn').addEventListener('click', async () => {
-      if (!deferredPrompt) return;
+    // Button behavior
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        status.textContent =
+          'Install is not available yet. Try refreshing or opening the app homepage first.';
+        return;
+      }
+
       deferredPrompt.prompt();
       await deferredPrompt.userChoice;
       deferredPrompt = null;
     });
 
-    /* 4️⃣ iOS manual instructions */
-    if (isIOS) {
-      document.getElementById('installBtn').style.display = 'none';
-      document.getElementById('iosHelp').style.display = 'block';
-    }
-
-    /* 5️⃣ Redirect after successful install */
+    // Redirect after install
     window.addEventListener('appinstalled', () => {
       window.location.href = '/';
     });
